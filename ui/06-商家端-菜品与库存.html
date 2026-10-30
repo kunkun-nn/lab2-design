@@ -1,0 +1,55 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="ui.css"><script src="icons.js"></script></head>
+<body>
+<div class="desktop">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">食</div><div><div class="brand-name">食刻商家</div><div class="brand-sub">MERCHANT CONSOLE</div></div></div>
+    <nav class="nav"><a><span class="ico">▦</span>订单工作台</a><a class="active"><span class="ico">🍱</span>菜品与库存</a><a><span class="ico">◔</span>营业统计</a><a><span class="ico">⚙</span>店铺设置</a></nav>
+    <div class="sidebar-bottom"><div class="t">阿婆砂锅饭</div><div class="s">营业中 · 今日 128 单<br>评分 4.8 · 校园专送</div></div>
+  </aside>
+  <main class="main">
+    <div class="topbar"><div class="page-title">菜品与库存</div><span class="pill">共 18 个菜品</span><div class="spacer"></div><div class="top-action">批量导入</div><button class="btn btn-primary btn-sm" style="height:34px">+ 新增菜品</button><div class="avatar blue">婆</div></div>
+    <div class="content" style="display:grid;grid-template-columns:1fr 320px;gap:16px">
+      <div style="min-width:0">
+        <div class="panel" style="padding:13px 16px;margin-bottom:12px">
+          <div class="row gap10"><div class="search" style="height:36px;flex:1;box-shadow:none;background:#F7FAFD"><svg class="icon icon-sm"><use href="#i-search"/></svg><input placeholder="搜索菜品名称"></div><div class="chip active">全部</div><div class="chip">主食</div><div class="chip">饮品</div><div class="chip">已售罄</div></div>
+        </div>
+        <div class="panel" style="padding:14px 16px">
+          <div class="panel-h"><div><div class="t">菜品列表</div><div class="s">改价和库存会实时影响顾客端</div></div><div class="pill green">库存同步正常</div></div>
+          <table class="table">
+            <thead><tr><th style="width:34%">菜品</th><th>分类</th><th>价格</th><th>库存</th><th>状态</th><th>操作</th></tr></thead>
+            <tbody>
+              <tr><td><span class="thumb">🍛</span><b>腊味煲仔饭</b></td><td>主食</td><td>¥22.00</td><td><b>36</b></td><td><span class="badge green">在售</span></td><td><span class="tiny" style="color:#2E74B5;font-weight:800">编辑</span></td></tr>
+              <tr><td><span class="thumb" style="background:linear-gradient(135deg,#E8F5E9,#B7DFB9)">🍗</span><b>香菇滑鸡饭</b></td><td>主食</td><td>¥18.00</td><td><b>8</b> <span class="badge orange">偏低</span></td><td><span class="badge green">在售</span></td><td><span class="tiny" style="color:#2E74B5;font-weight:800">编辑</span></td></tr>
+              <tr><td><span class="thumb" style="background:linear-gradient(135deg,#FFF1DC,#FFD9A8)">🍜</span><b>番茄肥牛米线</b></td><td>主食</td><td>¥20.00</td><td><b>21</b></td><td><span class="badge green">在售</span></td><td><span class="tiny" style="color:#2E74B5;font-weight:800">编辑</span></td></tr>
+              <tr><td><span class="thumb" style="background:linear-gradient(135deg,#E8F1FB,#BFD8F1)">🥤</span><b>手打柠檬茶</b></td><td>饮品</td><td>¥9.00</td><td><b>42</b></td><td><span class="badge green">在售</span></td><td><span class="tiny" style="color:#2E74B5;font-weight:800">编辑</span></td></tr>
+              <tr><td><span class="thumb" style="background:linear-gradient(135deg,#F3E8FF,#D8C2F0)">🍲</span><b>例汤（每日限量）</b></td><td>汤品</td><td>¥3.00</td><td><b>0</b></td><td><span class="badge red">已售罄</span></td><td><span class="tiny" style="color:#2E74B5;font-weight:800">补货</span></td></tr>
+              <tr><td><span class="thumb" style="background:linear-gradient(135deg,#FFF1DC,#FFD9A8)">🥘</span><b>腊味双拼饭</b></td><td>主食</td><td>¥26.00</td><td><b>14</b></td><td><span class="badge green">在售</span></td><td><span class="tiny" style="color:#2E74B5;font-weight:800">编辑</span></td></tr>
+            </tbody>
+          </table>
+          <div class="tiny muted" style="margin-top:10px">提示：库存低于 10 份会标黄；售罄后顾客端立即不可下单，已支付缺货订单需联系顾客取消并退款。</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+        <div class="panel" style="padding:15px">
+          <div class="panel-h"><div><div class="t">今日库存预警</div><div class="s">按销量预测</div></div><span class="badge red">3 项</span></div>
+          <div class="row between" style="padding:9px 0;border-bottom:1px solid #F0F3F8"><div><div class="small" style="font-weight:800">香菇滑鸡饭</div><div class="tiny muted">仅剩 8 份 · 预计 12:40 售罄</div></div><span class="badge orange">补货</span></div>
+          <div class="row between" style="padding:9px 0;border-bottom:1px solid #F0F3F8"><div><div class="small" style="font-weight:800">例汤</div><div class="tiny muted">已售罄 · 今日不再供应</div></div><span class="badge red">售罄</span></div>
+          <div class="row between" style="padding:9px 0"><div><div class="small" style="font-weight:800">腊味煲仔饭</div><div class="tiny muted">剩 36 份 · 库存充足</div></div><span class="badge green">正常</span></div>
+        </div>
+        <div class="panel" style="padding:15px;background:linear-gradient(145deg,#123B5D,#2E74B5);color:#fff">
+          <div style="font-size:13px;font-weight:900">今日经营小结</div>
+          <div class="tiny" style="opacity:.7;margin-top:6px">午市高峰 11:30–13:00</div>
+          <div style="display:flex;gap:18px;margin-top:16px"><div><div class="tiny" style="opacity:.6">营业额</div><div style="font-size:22px;font-weight:900">¥3,860</div></div><div><div class="tiny" style="opacity:.6">完成率</div><div style="font-size:22px;font-weight:900">96%</div></div></div>
+          <div style="height:7px;border-radius:999px;background:rgba(255,255,255,.18);margin-top:18px;overflow:hidden"><div style="width:96%;height:100%;background:#FFB25C;border-radius:999px"></div></div>
+          <div class="tiny" style="opacity:.65;margin-top:8px">目标 ¥4,000 · 还差 ¥140</div>
+        </div>
+        <div class="panel" style="padding:15px">
+          <div class="panel-h"><div class="t">快捷操作</div></div>
+          <div class="row gap8" style="margin-top:4px"><button class="btn btn-light btn-sm" style="flex:1">一键估清</button><button class="btn btn-light btn-sm" style="flex:1">打印菜单</button></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body></html>

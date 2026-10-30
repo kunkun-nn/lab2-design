@@ -1,0 +1,63 @@
+@startuml
+skinparam dpi 170
+skinparam defaultFontName "Microsoft YaHei"
+skinparam shadowing false
+skinparam sequence {
+  ArrowColor #1F4E79
+  LifeLineBorderColor #9DB7D5
+  ParticipantBackgroundColor #DCE9F7
+  ParticipantBorderColor #1F4E79
+  ParticipantFontColor #123B5D
+  ParticipantFontSize 14
+  ActorBackgroundColor #DCE9F7
+  ActorBorderColor #1F4E79
+  ActorFontColor #123B5D
+  ActorFontSize 14
+  MessageFontSize 13
+}
+skinparam note {
+  BackgroundColor #FFF7E8
+  BorderColor #C58A2A
+}
+title 图 3-6 下单支付与接单时序图
+autonumber
+
+actor 顾客
+participant "顾客端" as App
+participant "订单服务" as Order
+participant "库存服务" as Stock
+participant "支付服务" as Pay
+participant "支付平台" as PSP
+participant "商家端" as Merchant
+participant "日志服务" as Log
+
+顾客 -> App : 提交订单(请求号, 地址, 购物车)
+App -> Order : POST /orders
+Order -> Order : 校验请求号是否已存在
+alt 请求号重复
+  Order --> App : 返回首次创建的订单
+else 新请求
+  Order -> Stock : 校验并扣减库存
+  alt 库存不足
+    Stock --> Order : 扣减失败
+    Order --> App : 409 库存不足
+  else 扣减成功
+    Order -> Order : 事务写入订单/明细/地址快照
+    Order -> Pay : 创建支付单
+    Pay -> PSP : 发起支付
+    PSP --> Pay : 支付成功回调
+    Pay -> Order : 支付结果(按流水号幂等)
+    Order -> Order : 状态=待接单, version+1
+    Order -> Merchant : 发布 OrderPaid 事件
+    Merchant -> Order : 接单
+    Order -> Log : 记录状态变更
+    Order --> App : 接单成功
+  end
+end
+
+note right of Order
+  订单号、请求号、支付流水号唯一；
+  状态变更使用状态机 + 乐观锁；
+  支付超时 15 分钟自动取消。
+end note
+@enduml

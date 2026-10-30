@@ -1,0 +1,72 @@
+@startuml
+!pragma layout smetana
+skinparam dpi 170
+skinparam defaultFontName "Microsoft YaHei"
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam linetype ortho
+skinparam nodesep 24
+skinparam ranksep 32
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #1F4E79
+  FontColor #1F2937
+  FontSize 15
+}
+skinparam package {
+  BackgroundColor #F7FAFD
+  BorderColor #9DB7D5
+  FontColor #123B5D
+  FontSize 15
+  FontStyle bold
+}
+title 图 3-3 系统组件图
+
+package "客户端" {
+  [顾客端 H5/小程序] as CustomerApp
+  [商家工作台] as MerchantConsole
+  [骑手 App] as RiderApp
+  [平台管理后台] as AdminConsole
+}
+
+package "接入与业务模块" {
+  [API 网关 / BFF] as Gateway
+  [认证与权限] as Auth
+  [商品与店铺模块] as Catalog
+  [交易模块] as Trade
+  [履约模块] as Fulfillment
+  [治理模块] as Governance
+}
+
+[基础设施\nMySQL / Redis / MQ / 对象存储] as Infra
+[第三方支付沙箱] as PSP
+[地图 / 定位服务] as Map
+
+CustomerApp --> Gateway : HTTPS
+MerchantConsole --> Gateway
+RiderApp --> Gateway
+AdminConsole --> Gateway
+
+Gateway --> Auth : Token
+Gateway --> Catalog : 查询
+Gateway --> Trade : 下单/支付/退款
+Gateway --> Fulfillment : 派单/配送
+Gateway --> Governance : 后台管理
+
+Trade --> Catalog : 扣减/回补库存
+Trade --> Infra : 订单/支付/退款/事件
+Trade --> PSP : 支付/退款
+Fulfillment --> Trade : 读取订单
+Fulfillment --> Infra : 配送单/事件
+Fulfillment --> Map : 距离/ETA
+Governance --> Infra : 用户/日志/统计
+Catalog --> Infra : 菜品/库存/缓存
+Infra --> Fulfillment : OrderReady
+Infra --> Governance : OrderCompleted
+
+note right of Infra
+  MySQL 保存订单、支付、退款、配送和日志；
+  Redis 做缓存与幂等；MQ 传递领域事件；
+  对象存储保存菜品图片。
+end note
+@enduml

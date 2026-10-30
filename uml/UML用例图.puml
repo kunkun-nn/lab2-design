@@ -1,0 +1,58 @@
+@startuml
+left to right direction
+skinparam dpi 170
+skinparam defaultFontName "Microsoft YaHei"
+skinparam shadowing false
+skinparam usecase {
+  BackgroundColor #FFFFFF
+  BorderColor #1F4E79
+  FontColor #1F2937
+  FontSize 17
+}
+skinparam actor {
+  BackgroundColor #DCE9F7
+  BorderColor #1F4E79
+  FontColor #123B5D
+  FontSize 17
+}
+title 图 3-4 系统用例图（总览）
+
+actor "顾客" as Customer
+actor "商家" as Merchant
+actor "配送人员" as Rider
+actor "平台管理员" as Admin
+
+rectangle "外卖点餐与配送系统" {
+  usecase "浏览、购物车与下单" as UC_Order
+  usecase "支付与退款" as UC_Pay
+  usecase "订单与配送查询" as UC_Track
+  usecase "店铺/菜品/库存管理" as UC_Shop
+  usecase "接单、拒单与制作" as UC_Fulfill
+  usecase "配送执行与异常上报" as UC_Deliver
+  usecase "平台治理与审计" as UC_Admin
+  usecase "查询与统计" as UC_Stats
+}
+
+Customer --> UC_Order
+Customer --> UC_Pay
+Customer --> UC_Track
+Merchant --> UC_Shop
+Merchant --> UC_Fulfill
+Rider --> UC_Deliver
+Admin --> UC_Admin
+Admin --> UC_Stats
+
+UC_Order ..> UC_Pay : <<include>>
+UC_Order ..> UC_Track : 生成订单
+UC_Fulfill ..> UC_Shop : 校验库存
+UC_Admin ..> UC_Stats : <<include>>
+
+note right of UC_Pay
+  支付/退款调用第三方支付平台；
+  回调按支付流水号幂等。
+end note
+note right of UC_Deliver
+  调用地图/定位服务计算距离和 ETA；
+  失败可改派一次，仍失败则取消退款。
+end note
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+skinparam dpi 170
+skinparam defaultFontName "Microsoft YaHei"
+skinparam shadowing false
+skinparam sequence {
+  ArrowColor #1F4E79
+  LifeLineBorderColor #9DB7D5
+  ParticipantBackgroundColor #DCE9F7
+  ParticipantBorderColor #1F4E79
+  ParticipantFontColor #123B5D
+  ParticipantFontSize 14
+  ActorBackgroundColor #DCE9F7
+  ActorBorderColor #1F4E79
+  ActorFontColor #123B5D
+  ActorFontSize 14
+  MessageFontSize 13
+}
+title 图 3-7 配送失败与退款时序图
+autonumber
+
+actor 骑手
+participant "骑手 App" as RiderApp
+participant "调度服务" as Dispatch
+participant "订单服务" as Order
+participant "退款服务" as Refund
+participant "支付平台" as PSP
+participant "商家端" as Merchant
+participant "日志服务" as Log
+
+骑手 -> RiderApp : 上报配送异常(原因)
+RiderApp -> Dispatch : 提交异常
+Dispatch -> Order : 校验订单状态(配送中)
+Order --> Dispatch : 允许上报
+Dispatch -> Dispatch : 订单状态=配送异常
+Dispatch -> Merchant : 通知商家
+Dispatch -> Dispatch : 尝试改派一次
+alt 改派成功
+  Dispatch -> Order : 状态=配送中, 新配送单
+  Dispatch --> RiderApp : 新任务
+else 改派失败
+  Dispatch -> Order : 取消订单
+  Order -> Refund : 创建全额退款单
+  Refund -> PSP : 原路退款
+  PSP --> Refund : 退款成功
+  Refund -> Order : 订单状态=已退款
+  Dispatch -> Log : 记录异常与退款
+  Dispatch --> Merchant : 退款完成通知
+end
+
+note right of Order
+  配送异常不能长期停留；
+  同一异常重复上报只保留一条记录；
+  退款失败保持“退款中”并重试。
+end note
+@enduml

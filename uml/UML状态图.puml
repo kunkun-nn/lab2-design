@@ -1,0 +1,45 @@
+@startuml
+!pragma layout smetana
+skinparam dpi 170
+skinparam defaultFontName "Microsoft YaHei"
+skinparam shadowing false
+skinparam state {
+  BackgroundColor #FFFFFF
+  BorderColor #1F4E79
+  FontColor #1F2937
+  FontSize 16
+}
+skinparam arrowColor #1F4E79
+skinparam ArrowFontSize 13
+title 图 3-5 订单状态图
+
+[*] --> 待支付 : 创建订单
+待支付 --> 待接单 : 支付成功
+待支付 --> 已取消 : 用户取消 / 15 分钟超时
+待接单 --> 制作中 : 商家接单
+待接单 --> 退款中 : 拒单 / 超时 / 用户取消
+制作中 --> 待配送 : 制作完成
+制作中 --> 退款中 : 缺货 / 商家同意取消
+待配送 --> 配送中 : 骑手取餐
+待配送 --> 退款中 : 取消 / 配送前异常
+配送中 --> 已送达 : 送达
+配送中 --> 配送异常 : 上报异常
+配送异常 --> 配送中 : 改派成功
+配送异常 --> 退款中 : 改派失败
+已送达 --> 已完成 : 顾客确认 / 30 分钟自动
+已送达 --> 退款中 : 售后成立
+已完成 --> 退款中 : 售后成立
+退款中 --> 已退款 : 退款成功
+退款中 --> 退款中 : 失败重试
+已取消 --> [*]
+已退款 --> [*]
+
+note right of 退款中
+  退款失败保持“退款中”；
+  连续失败 3 次转人工。
+end note
+note bottom of 已取消
+  仅未支付订单进入；
+  已支付取消进入退款中。
+end note
+@enduml

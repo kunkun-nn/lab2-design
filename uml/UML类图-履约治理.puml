@@ -1,0 +1,47 @@
+@startuml
+!pragma layout smetana
+skinparam dpi 170
+skinparam defaultFontName "Microsoft YaHei"
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam nodesep 32
+skinparam ranksep 36
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #1F4E79
+  ArrowColor #1F4E79
+  FontColor #1F2937
+  HeaderBackgroundColor #DCE9F7
+  FontSize 16
+}
+hide circle
+hide members
+title 图 3-2 角色、履约与审计类图
+
+abstract class "用户 User" as User
+class "顾客 Customer" as Customer
+class "商家 Merchant" as Merchant
+class "配送人员 Rider" as Rider
+class "管理员 Admin" as Admin
+class "店铺 Shop" as Shop
+class "订单 Order" as Order
+class "配送任务 DeliveryTask" as DeliveryTask
+class "配送异常 DeliveryException" as DeliveryException
+class "操作日志 OperationLog" as OperationLog
+
+User <|-- Customer
+User <|-- Merchant
+User <|-- Rider
+User <|-- Admin
+Merchant "1" -- "1..*" Shop : 经营
+Rider "1" -- "0..*" DeliveryTask : 执行
+Order "1" -- "0..1" DeliveryTask : 履约
+DeliveryTask "1" -- "0..1" DeliveryException : 记录
+User "1" -- "0..*" OperationLog : 操作
+Order "1" -- "0..*" OperationLog : 审计
+
+note right of DeliveryTask
+  一个订单同一时间只有一条有效配送单；
+  改派时旧单失效并记录原因。
+end note
+@enduml
